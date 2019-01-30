@@ -1,6 +1,5 @@
-import { Canvas } from "./canvas";
+import { AnimationLoop } from "./animationLoop";
 
 document.addEventListener("DOMContentLoaded", () => {
-    const canvas = new Canvas();
-    canvas.drawCircle();
+    new AnimationLoop().start();
 }, false);
