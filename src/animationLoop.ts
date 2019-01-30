@@ -19,16 +19,16 @@ export class AnimationLoop {
         this.tick();
     }
     tick() {
-        // 16 ms is just over 60fps
-        setTimeout(() => {
-            this.tick();
-        }, 16);
-
         this.scene.update();
 
         const image = this.generateImage();
 
         this.canvas.paint(image);
+
+        // 16 ms is just over 60fps
+        setTimeout(() => {
+            this.tick();
+        }, 16);
     }
     generateImage(): Colour[][] {
         let image: Colour[][] = [];
@@ -66,14 +66,14 @@ export class AnimationLoop {
             let vertexNext = poly.points[(i+1)%n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(column, row, 0)) > 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) > 0) {
                         windingNumber++;
                     }
                 }
             }
             else {
                 if (vertexNext.y <= column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(column, row, 0)) < 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) < 0) {
                         windingNumber--;
                     }
                 }

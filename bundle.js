@@ -16,13 +16,13 @@ class AnimationLoop {
         this.tick();
     }
     tick() {
+        this.scene.update();
+        const image = this.generateImage();
+        this.canvas.paint(image);
         // 16 ms is just over 60fps
         setTimeout(() => {
             this.tick();
         }, 16);
-        this.scene.update();
-        const image = this.generateImage();
-        this.canvas.paint(image);
     }
     generateImage() {
         let image = [];
@@ -57,14 +57,14 @@ class AnimationLoop {
             let vertexNext = poly.points[(i + 1) % n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new point_1.Point(column, row, 0)) > 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new point_1.Point(row, column, 0)) > 0) {
                         windingNumber++;
                     }
                 }
             }
             else {
                 if (vertexNext.y <= column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new point_1.Point(column, row, 0)) < 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new point_1.Point(row, column, 0)) < 0) {
                         windingNumber--;
                     }
                 }
@@ -168,7 +168,10 @@ class Scene {
         this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 20), new point_1.Point(200, 100, 20), new point_1.Point(300, 300, 20)], new colour_1.Colour(0, 255, 0, 1)));
     }
     update() {
-        // TODO
+        // an arbitrary movement
+        this.polys[0].points[0].x = (this.polys[0].points[0].x + 1) % 500;
+        this.polys[0].points[0].y = (this.polys[0].points[0].y + 1) % 500;
+        this.polys[0].points[0].z = (this.polys[0].points[0].z + 1) % 500;
     }
 }
 exports.Scene = Scene;
