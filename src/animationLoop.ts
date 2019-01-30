@@ -5,20 +5,29 @@ import { Poly } from "./poly";
 import { Point } from "./point";
 
 export class AnimationLoop {
-    private canvas: Canvas;
-    private scene: Scene;
     private width: number;
     private height: number;
+    private canvas: Canvas;
+    private scene: Scene;
+    private timestamp: Date;
+    private timestampElement: HTMLElement;
     constructor() {
         this.width = 500;
         this.height = 500;
         this.canvas = new Canvas(this.width, this.height);
         this.scene = new Scene();
+        this.timestamp = new Date();
+        this.timestampElement = document.getElementById('timestamp') as HTMLElement
     }
     start() {
         this.tick();
     }
     tick() {
+        let newTime = new Date();
+        let timeDiff = newTime.getTime() - this.timestamp.getTime();
+        this.timestampElement.textContent = timeDiff.toString();
+        this.timestamp = newTime;
+
         this.scene.update();
 
         const image = this.generateImage();

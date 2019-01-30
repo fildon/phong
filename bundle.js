@@ -11,11 +11,17 @@ class AnimationLoop {
         this.height = 500;
         this.canvas = new canvas_1.Canvas(this.width, this.height);
         this.scene = new scene_1.Scene();
+        this.timestamp = new Date();
+        this.timestampElement = document.getElementById('timestamp');
     }
     start() {
         this.tick();
     }
     tick() {
+        let newTime = new Date();
+        let timeDiff = newTime.getTime() - this.timestamp.getTime();
+        this.timestampElement.textContent = timeDiff.toString();
+        this.timestamp = newTime;
         this.scene.update();
         const image = this.generateImage();
         this.canvas.paint(image);
