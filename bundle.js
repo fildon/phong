@@ -42,9 +42,14 @@ class AnimationLoop {
     }
     generateColourAt(rowIndex, columnIndex) {
         let result = new colour_1.Colour(0, 0, 0, 1);
+        let shortest = Infinity;
         this.scene.polys.forEach(poly => {
             if (this.pointInPoly(rowIndex, columnIndex, poly)) {
-                result = poly.colour;
+                // TODO this is a hack by which a polygon's distance is defined only by the first vertex
+                if (poly.points[0].z < shortest) {
+                    result = poly.colour;
+                    shortest = poly.points[0].z;
+                }
             }
         });
         return result;
@@ -164,8 +169,8 @@ class Scene {
     constructor() {
         this.polys = [];
         // TODO just a test scene for now
-        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 10), new point_1.Point(200, 300, 10), new point_1.Point(300, 100, 10)], new colour_1.Colour(255, 0, 0, 1)));
-        this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 20), new point_1.Point(200, 100, 20), new point_1.Point(300, 300, 20)], new colour_1.Colour(0, 255, 0, 1)));
+        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 300, 10), new point_1.Point(300, 100, 10)], new colour_1.Colour(255, 0, 0, 1)));
+        this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 250), new point_1.Point(200, 100, 250), new point_1.Point(300, 300, 250)], new colour_1.Colour(0, 255, 0, 1)));
     }
     update() {
         // an arbitrary movement

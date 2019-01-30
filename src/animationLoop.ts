@@ -50,9 +50,14 @@ export class AnimationLoop {
 
     generateColourAt(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
+        let shortest = Infinity;
         this.scene.polys.forEach(poly => {
             if (this.pointInPoly(rowIndex, columnIndex, poly)) {
-                result = poly.colour;
+                // TODO this is a hack by which a polygon's distance is defined only by the first vertex
+                if (poly.points[0].z < shortest) {
+                    result = poly.colour;
+                    shortest = poly.points[0].z;
+                }
             }
         });
         return result;
