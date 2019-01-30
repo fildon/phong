@@ -25,7 +25,9 @@ export class AnimationLoop {
     tick() {
         let newTime = new Date();
         let timeDiff = newTime.getTime() - this.timestamp.getTime();
-        this.timestampElement.textContent = timeDiff.toString();
+        let fps = 1000 / timeDiff;
+        fps = Math.floor(100 * fps) / 100; // 2 decimal places
+        this.timestampElement.textContent = fps.toString();
         this.timestamp = newTime;
 
         this.scene.update();
