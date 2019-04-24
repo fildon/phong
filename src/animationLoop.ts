@@ -63,18 +63,19 @@ export class AnimationLoop {
         let result = new Colour(0, 0, 0, 1);
         let shortest = Infinity;
         this.scene.polys.forEach(poly => {
-            if (this.pointInPoly(rowIndex, columnIndex, poly)) {
+            let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
+            if (windingResult.inPoly) {
                 // TODO this is a hack by which a polygon's distance is defined only by the first vertex
-                if (poly.points[0].z < shortest) {
+                if (windingResult.distance < shortest) {
                     result = poly.colour;
-                    shortest = poly.points[0].z;
+                    shortest = windingResult.distance;
                 }
             }
         });
         return result;
     }
 
-    pointInPoly(row: number, column: number, poly: Poly): boolean {
+    getWindingResult(row: number, column: number, poly: Poly): WindingNumberResult {
         let windingNumber = 0;
         let n = poly.points.length;
         for (let i = 0; i < n; i++) {
@@ -95,7 +96,16 @@ export class AnimationLoop {
                 }
             }
         }
-        return windingNumber != 0;
+        if (!windingNumber) {
+            return {
+                inPoly: false,
+                distance: NaN // TODO see if we can just use this value as the flag, rather than an if/else
+            }
+        }
+        return {
+            inPoly: true,
+            distance: poly.calculateZ(row, column)
+        }
     }
 
     // TODO have some selfrespect and rename these arguments
@@ -103,4 +113,9 @@ export class AnimationLoop {
         return ((P1.x - P0.x) * (P2.y - P0.y)
         - (P2.x - P0.x) * (P1.y - P0.y));
     }
+}
+
+interface WindingNumberResult {
+    inPoly: boolean;
+    distance: number;
 }

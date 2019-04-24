@@ -52,17 +52,18 @@ class AnimationLoop {
         let result = new colour_1.Colour(0, 0, 0, 1);
         let shortest = Infinity;
         this.scene.polys.forEach(poly => {
-            if (this.pointInPoly(rowIndex, columnIndex, poly)) {
+            let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
+            if (windingResult.inPoly) {
                 // TODO this is a hack by which a polygon's distance is defined only by the first vertex
-                if (poly.points[0].z < shortest) {
+                if (windingResult.distance < shortest) {
                     result = poly.colour;
-                    shortest = poly.points[0].z;
+                    shortest = windingResult.distance;
                 }
             }
         });
         return result;
     }
-    pointInPoly(row, column, poly) {
+    getWindingResult(row, column, poly) {
         let windingNumber = 0;
         let n = poly.points.length;
         for (let i = 0; i < n; i++) {
@@ -83,7 +84,16 @@ class AnimationLoop {
                 }
             }
         }
-        return windingNumber != 0;
+        if (!windingNumber) {
+            return {
+                inPoly: false,
+                distance: NaN // TODO see if we can just use this value as the flag, rather than an if/else
+            };
+        }
+        return {
+            inPoly: true,
+            distance: poly.calculateZ(row, column)
+        };
     }
     // TODO have some selfrespect and rename these arguments
     isLeft(P0, P1, P2) {
@@ -161,8 +171,23 @@ exports.Point = Point;
 Object.defineProperty(exports, "__esModule", { value: true });
 class Poly {
     constructor(points, colour) {
+        if (points.length < 3) {
+            throw new Error("too few points to define poly");
+        }
+        // TODO test that triangle is not degenerate!
         this.points = points;
         this.colour = colour;
+        let v1 = [points[0].x - points[1].x, points[0].y - points[1].y, points[0].z - points[1].z];
+        let v2 = [points[0].x - points[2].x, points[0].y - points[2].y, points[0].z - points[2].z];
+        let r = v1[1] * v2[2] - v1[2] * v2[1];
+        let s = v1[2] * v2[0] - v1[0] * v2[2];
+        let t = v1[0] * v2[1] - v1[1] * v2[0];
+        let constant = (1 / t) * (r * points[0].x + s * points[0].y) + points[0].z;
+        let xMult = -r / t;
+        let yMult = -s / t;
+        this.calculateZ = (x, y) => {
+            return constant + xMult * x + yMult * y;
+        };
     }
 }
 exports.Poly = Poly;
@@ -177,8 +202,8 @@ class Scene {
     constructor() {
         this.polys = [];
         // TODO just a test scene for now
-        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 300, 10), new point_1.Point(300, 100, 10)], new colour_1.Colour(255, 0, 0, 1)));
-        this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 250), new point_1.Point(200, 100, 250), new point_1.Point(300, 300, 250)], new colour_1.Colour(0, 255, 0, 1)));
+        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 300, 80), new point_1.Point(300, 100, 200)], new colour_1.Colour(255, 0, 0, 1)));
+        this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 100), new point_1.Point(200, 100, 100), new point_1.Point(300, 300, 100)], new colour_1.Colour(0, 255, 0, 1)));
     }
     update() {
         // an arbitrary movement

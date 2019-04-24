@@ -7,8 +7,8 @@ export class Scene {
     constructor() {
         this.polys = [];
         // TODO just a test scene for now
-        this.polys.push(new Poly([new Point(100, 100, 100), new Point(200, 300, 10), new Point(300, 100, 10)], new Colour(255, 0, 0, 1)));
-        this.polys.push(new Poly([new Point(100, 300, 250), new Point(200, 100, 250), new Point(300, 300, 250)], new Colour(0, 255, 0, 1)));
+        this.polys.push(new Poly([new Point(100, 100, 100), new Point(200, 300, 80), new Point(300, 100, 200)], new Colour(255, 0, 0, 1)));
+        this.polys.push(new Poly([new Point(100, 300, 100), new Point(200, 100, 100), new Point(300, 300, 100)], new Colour(0, 255, 0, 1)));
     }
 
     update() {
