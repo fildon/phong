@@ -5,30 +5,41 @@ import { Poly } from "./poly";
 import { Point } from "./point";
 
 export class AnimationLoop {
-    private canvas: Canvas;
-    private scene: Scene;
     private width: number;
     private height: number;
+    private canvas: Canvas;
+    private scene: Scene;
+    private timestamp: Date;
+    private timestampElement: HTMLElement;
     constructor() {
         this.width = 500;
         this.height = 500;
         this.canvas = new Canvas(this.width, this.height);
         this.scene = new Scene();
+        this.timestamp = new Date();
+        this.timestampElement = document.getElementById('timestamp') as HTMLElement
     }
     start() {
         this.tick();
     }
     tick() {
-        // 16 ms is just over 60fps
-        setTimeout(() => {
-            this.tick();
-        }, 16);
+        let newTime = new Date();
+        let timeDiff = newTime.getTime() - this.timestamp.getTime();
+        let fps = 1000 / timeDiff;
+        fps = Math.floor(100 * fps) / 100; // 2 decimal places
+        this.timestampElement.textContent = fps.toString();
+        this.timestamp = newTime;
 
         this.scene.update();
 
         const image = this.generateImage();
 
         this.canvas.paint(image);
+
+        // 16 ms is just over 60fps
+        setTimeout(() => {
+            this.tick();
+        }, 16);
     }
     generateImage(): Colour[][] {
         let image: Colour[][] = [];
@@ -50,15 +61,21 @@ export class AnimationLoop {
 
     generateColourAt(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
+        let shortest = Infinity;
         this.scene.polys.forEach(poly => {
-            if (this.pointInPoly(rowIndex, columnIndex, poly)) {
-                result = poly.colour;
+            let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
+            if (windingResult.inPoly) {
+                // TODO this is a hack by which a polygon's distance is defined only by the first vertex
+                if (windingResult.distance < shortest) {
+                    result = poly.colour;
+                    shortest = windingResult.distance;
+                }
             }
         });
         return result;
     }
 
-    pointInPoly(row: number, column: number, poly: Poly): boolean {
+    getWindingResult(row: number, column: number, poly: Poly): WindingNumberResult {
         let windingNumber = 0;
         let n = poly.points.length;
         for (let i = 0; i < n; i++) {
@@ -66,20 +83,29 @@ export class AnimationLoop {
             let vertexNext = poly.points[(i+1)%n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(column, row, 0)) > 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) > 0) {
                         windingNumber++;
                     }
                 }
             }
             else {
                 if (vertexNext.y <= column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(column, row, 0)) < 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) < 0) {
                         windingNumber--;
                     }
                 }
             }
         }
-        return windingNumber != 0;
+        if (!windingNumber) {
+            return {
+                inPoly: false,
+                distance: NaN // TODO see if we can just use this value as the flag, rather than an if/else
+            }
+        }
+        return {
+            inPoly: true,
+            distance: poly.calculateZ(row, column)
+        }
     }
 
     // TODO have some selfrespect and rename these arguments
@@ -87,4 +113,9 @@ export class AnimationLoop {
         return ((P1.x - P0.x) * (P2.y - P0.y)
         - (P2.x - P0.x) * (P1.y - P0.y));
     }
+}
+
+interface WindingNumberResult {
+    inPoly: boolean;
+    distance: number;
 }
