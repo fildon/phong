@@ -202,7 +202,7 @@ class Scene {
     constructor() {
         this.polys = [];
         // TODO just a test scene for now
-        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 300, 80), new point_1.Point(300, 100, 200)], new colour_1.Colour(255, 0, 0, 1)));
+        this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 400, 80), new point_1.Point(300, 100, 200)], new colour_1.Colour(255, 0, 0, 1)));
         this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 100), new point_1.Point(200, 100, 100), new point_1.Point(300, 300, 100)], new colour_1.Colour(0, 255, 0, 1)));
     }
     update() {
