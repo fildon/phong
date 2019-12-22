@@ -27,4 +27,15 @@ export class Point {
     public dotProduct(other: Point) {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
+
+    public rotateInYAround(p: Point, radians: number): Point {
+        const translation = new Point(p.x, p.y, p.z);
+        const translated = this.subtract(translation);
+        const rotated = new Point(
+            translated.x * Math.cos(radians) - translated.z * Math.sin(radians),
+            translated.y,
+            translated.z * Math.cos(radians) + translated.x * Math.sin(radians),
+        );
+        return rotated.add(translation);
+    }
 }

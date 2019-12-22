@@ -6,12 +6,13 @@ export class Scene {
     public drawables: IDrawable[];
     constructor() {
         this.drawables = [];
+        const top = new Point(250, 100, 100);
+        const a = new Point(250, 200, 200);
+        const b = a.rotateInYAround(top, (2 * Math.PI) / 3);
+        const c = b.rotateInYAround(top, (2 * Math.PI) / 3);
         this.drawables.push(
             new Cube(
-                new Point(250, 100, 100),
-                new Point(250, 200, 200),
-                new Point(150, 200, 0),
-                new Point(350, 200, 0),
+                top, a, b, c,
                 function(this: Cube) {
                     this.rotate();
                 },

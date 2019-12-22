@@ -52,24 +52,13 @@ export class Cube implements IDrawable {
     }
 
     public rotate() {
-        this.p0 = this.rotatePoint(this.p0);
-        this.p1 = this.rotatePoint(this.p1);
-        this.p2 = this.rotatePoint(this.p2);
-        this.p3 = this.rotatePoint(this.p3);
-        this.p12 = this.rotatePoint(this.p12);
-        this.p13 = this.rotatePoint(this.p13);
-        this.p23 = this.rotatePoint(this.p23);
-        this.p123 = this.rotatePoint(this.p123);
-    }
-
-    private rotatePoint(p: Point): Point {
-        const translation = new Point(this.p0.x, this.p0.y, this.p0.z);
-        const translated = p.subtract(translation);
-        const rotated = new Point(
-            translated.x * Math.cos(0.1) - translated.z * Math.sin(0.1),
-            translated.y,
-            translated.z * Math.cos(0.1) + translated.x * Math.sin(0.1)
-        );
-        return rotated.add(translation);
+        this.p0 = this.p0.rotateInYAround(this.p0, 0.1);
+        this.p1 = this.p1.rotateInYAround(this.p0, 0.1);
+        this.p2 = this.p2.rotateInYAround(this.p0, 0.1);
+        this.p3 = this.p3.rotateInYAround(this.p0, 0.1);
+        this.p12 = this.p12.rotateInYAround(this.p0, 0.1);
+        this.p13 = this.p13.rotateInYAround(this.p0, 0.1);
+        this.p23 = this.p23.rotateInYAround(this.p0, 0.1);
+        this.p123 = this.p123.rotateInYAround(this.p0, 0.1);
     }
 }
