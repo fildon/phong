@@ -1,7 +1,7 @@
 import { Canvas } from "./canvas";
 import { Scene } from "./scene";
 import { Colour } from "./colour";
-import { Poly } from "./poly";
+import { Poly } from "../drawables/poly";
 import { Point } from "./point";
 
 export class AnimationLoop {
@@ -64,7 +64,7 @@ export class AnimationLoop {
     generateColourAt(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
         let shortest = Infinity;
-        this.scene.polys.forEach(poly => {
+        this.scene.getPolys().forEach(poly => {
             let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
             if (windingResult) {
                 if (windingResult < shortest) {

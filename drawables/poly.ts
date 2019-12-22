@@ -1,10 +1,12 @@
-import { Point } from "./point";
-import { Colour } from "./colour";
+import { Point } from "../src/point";
+import { Colour } from "../src/colour";
+import { IDrawable } from "./iDrawable"
 
-export class Poly {
+export class Poly implements IDrawable {
     public points: Point[];
     public colour: Colour;
-    constructor(points: Point[], colour: Colour) {
+    public update: () => void;
+    constructor(points: Point[], colour: Colour, update: () => void = () => {}) {
         if (points.length < 3) {
             throw new Error("too few points to define poly");
         }
@@ -12,6 +14,11 @@ export class Poly {
         
         this.points = points;
         this.colour = colour;
+        this.update = update
+    }
+
+    getPolys() {
+        return [this]
     }
 
     calculateZ(x: number, y: number): number {
