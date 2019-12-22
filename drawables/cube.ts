@@ -52,13 +52,13 @@ export class Cube implements IDrawable {
     }
 
     public rotate() {
-        this.p0 = this.p0.rotateInYAround(this.p0, 0.1);
-        this.p1 = this.p1.rotateInYAround(this.p0, 0.1);
-        this.p2 = this.p2.rotateInYAround(this.p0, 0.1);
-        this.p3 = this.p3.rotateInYAround(this.p0, 0.1);
-        this.p12 = this.p12.rotateInYAround(this.p0, 0.1);
-        this.p13 = this.p13.rotateInYAround(this.p0, 0.1);
-        this.p23 = this.p23.rotateInYAround(this.p0, 0.1);
-        this.p123 = this.p123.rotateInYAround(this.p0, 0.1);
+        this.p0 = this.p0.rotateInYAround(this.p0, 0.01);
+        this.p1 = this.p1.rotateInYAround(this.p0, 0.01);
+        this.p2 = this.p2.rotateInYAround(this.p0, 0.01);
+        this.p3 = this.p3.rotateInYAround(this.p0, 0.01);
+        this.p12 = this.p12.rotateInYAround(this.p0, 0.01);
+        this.p13 = this.p13.rotateInYAround(this.p0, 0.01);
+        this.p23 = this.p23.rotateInYAround(this.p0, 0.01);
+        this.p123 = this.p123.rotateInYAround(this.p0, 0.01);
     }
 }

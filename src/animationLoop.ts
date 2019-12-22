@@ -55,17 +55,18 @@ export class AnimationLoop {
     private generateImageRow(rowIndex: number): Colour[] {
         const row: Colour[] = [];
         for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
-            const colour = this.generateColourAt(rowIndex, columnIndex);
+            if (rowIndex % 4 !== 0 || columnIndex % 4 !== 0) {
+                row.push(new Colour(0, 0, 0, 1));
+                continue;
+            }
+            const colour = this.colourAtEndOfRay(rowIndex, columnIndex);
             row.push(colour);
         }
         return row;
     }
 
-    private generateColourAt(rowIndex: number, columnIndex: number): Colour {
+    private colourAtEndOfRay(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
-        if (rowIndex % 2 === 0 || columnIndex % 2 === 0) {
-            return result;
-        }
         let shortest = Infinity;
         this.scene.getPolys().forEach((poly) => {
             const windingResult = this.getWindingNumber(rowIndex, columnIndex, poly);

@@ -3,7 +3,7 @@ import { Colour } from "./colour";
 export class Canvas {
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
-    private previousImage: Colour[][];
+    public previousImage: Colour[][];
     constructor(width: number, height: number) {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         if (!canvas) {
