@@ -9,4 +9,8 @@ export class Colour {
         this.b = b;
         this.a = a;
     }
+
+    public equals(other: Colour) {
+        return this.r === other.r && this.g === other.g && this.b === other.b && this.a === other.a;
+    }
 }
