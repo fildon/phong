@@ -65,7 +65,7 @@ export class AnimationLoop {
         let result = new Colour(0, 0, 0, 1);
         let shortest = Infinity;
         this.scene.getPolys().forEach((poly) => {
-            const windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
+            const windingResult = this.getWindingNumber(rowIndex, columnIndex, poly);
             if (windingResult) {
                 if (windingResult < shortest) {
                     result = poly.colour;
@@ -76,7 +76,7 @@ export class AnimationLoop {
         return result;
     }
 
-    private getWindingResult(row: number, column: number, poly: Poly): number | null {
+    private getWindingNumber(row: number, column: number, poly: Poly): number | null {
         let windingNumber = 0;
         const n = poly.points.length;
         for (let i = 0; i < n; i++) {

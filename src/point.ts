@@ -7,4 +7,12 @@ export class Point {
         this.y = y;
         this.z = z;
     }
+
+    public subtract(other: Point) {
+        return new Point(this.x - other.x, this.y - other.y, this.z - other.z);
+    }
+
+    public add(other: Point) {
+        return new Point(this.x + other.x, this.y + other.y, this.z + other.z);
+    }
 }
