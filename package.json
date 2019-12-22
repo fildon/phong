@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "tsc && npx webpack --config webpack.config.js --mode=production"
+    "build": "tsc && npx webpack --config webpack.config.js --mode=production && npm run lint",
+    "lint": "tslint -c tslint.json src/**/*.ts"
   },
   "author": "",
   "license": "ISC",
@@ -12,6 +13,8 @@
     "webpack-cli": "^3.3.10"
   },
   "dependencies": {
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.4",
     "webpack": "^4.41.4"
   }
 }

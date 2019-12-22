@@ -17,16 +17,16 @@ export class AnimationLoop {
         this.canvas = new Canvas(this.width, this.height);
         this.scene = new Scene();
         this.timestamp = new Date();
-        this.timestampElement = document.getElementById('timestamp') as HTMLElement
+        this.timestampElement = document.getElementById("timestamp") as HTMLElement;
     }
 
-    start() {
+    public start() {
         this.tick();
     }
 
-    tick() {
-        let newTime = new Date();
-        let timeDiff = newTime.getTime() - this.timestamp.getTime();
+    private tick() {
+        const newTime = new Date();
+        const timeDiff = newTime.getTime() - this.timestamp.getTime();
         let fps = 1000 / timeDiff;
         fps = Math.floor(100 * fps) / 100; // 2 decimal places
         this.timestampElement.textContent = fps.toString();
@@ -43,29 +43,29 @@ export class AnimationLoop {
         }, 0);
     }
 
-    generateImage(): Colour[][] {
-        let image: Colour[][] = [];
+    private generateImage(): Colour[][] {
+        const image: Colour[][] = [];
         for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
-            let row = this.generateImageRow(rowIndex);
+            const row = this.generateImageRow(rowIndex);
             image.push(row);
         }
         return image;
     }
 
-    generateImageRow(rowIndex: number): Colour[] {
-        let row: Colour[] = [];
+    private generateImageRow(rowIndex: number): Colour[] {
+        const row: Colour[] = [];
         for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
-            let colour = this.generateColourAt(rowIndex, columnIndex);
+            const colour = this.generateColourAt(rowIndex, columnIndex);
             row.push(colour);
         }
         return row;
     }
 
-    generateColourAt(rowIndex: number, columnIndex: number): Colour {
+    private generateColourAt(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
         let shortest = Infinity;
-        this.scene.getPolys().forEach(poly => {
-            let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
+        this.scene.getPolys().forEach((poly) => {
+            const windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
             if (windingResult) {
                 if (windingResult < shortest) {
                     result = poly.colour;
@@ -76,20 +76,19 @@ export class AnimationLoop {
         return result;
     }
 
-    getWindingResult(row: number, column: number, poly: Poly): number | null {
+    private getWindingResult(row: number, column: number, poly: Poly): number | null {
         let windingNumber = 0;
-        let n = poly.points.length;
+        const n = poly.points.length;
         for (let i = 0; i < n; i++) {
-            let vertexCurrent = poly.points[i];
-            let vertexNext = poly.points[(i + 1) % n];
+            const vertexCurrent = poly.points[i];
+            const vertexNext = poly.points[(i + 1) % n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
                     if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) > 0) {
                         windingNumber++;
                     }
                 }
-            }
-            else {
+            } else {
                 if (vertexNext.y <= column) {
                     if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) < 0) {
                         windingNumber--;
@@ -98,12 +97,12 @@ export class AnimationLoop {
             }
         }
         if (!windingNumber) {
-            return null
+            return null;
         }
-        return poly.calculateZ(row, column)
+        return poly.calculateZ(row, column);
     }
 
-    isLeft(P0: Point, P1: Point, P2: Point): number {
+    private isLeft(P0: Point, P1: Point, P2: Point): number {
         return ((P1.x - P0.x) * (P2.y - P0.y)
             - (P2.x - P0.x) * (P1.y - P0.y));
     }

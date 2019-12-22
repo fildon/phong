@@ -15,7 +15,7 @@ export class Scene {
                     this.points[0].x = (this.points[0].x + 1) % 500;
                     this.points[0].y = (this.points[0].y + 1) % 500;
                     this.points[0].z = (this.points[0].z + 1) % 500;
-                }
+                },
             ));
         this.drawables.push(
             new Poly(
@@ -24,13 +24,13 @@ export class Scene {
             ));
     }
 
-    getPolys() {
+    public getPolys() {
         return this.drawables
-            .map(d => d.getPolys())
-            .reduce((prev, curr) => prev.concat(curr), [])
+            .map((d) => d.getPolys())
+            .reduce((prev, curr) => prev.concat(curr), []);
     }
 
-    update() {
-        this.drawables.forEach(d => d.update())
+    public update() {
+        this.drawables.forEach((d) => d.update());
     }
 }
