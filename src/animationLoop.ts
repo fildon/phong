@@ -32,11 +32,11 @@ export class AnimationLoop {
         this.timestampElement.textContent = fps.toString();
         this.timestamp = newTime;
 
-        this.scene.update();
-
         const image = this.generateImage();
 
         this.canvas.paint(image);
+
+        this.scene.update();
 
         setTimeout(() => {
             this.tick();

@@ -15,4 +15,16 @@ export class Point {
     public add(other: Point) {
         return new Point(this.x + other.x, this.y + other.y, this.z + other.z);
     }
+
+    public crossProduct(other: Point) {
+        return new Point(
+            this.y * other.z - this.z * other.y,
+            this.z * other.x - this.x * other.z,
+            this.x * other.y - this.y * other.x,
+        );
+    }
+
+    public dotProduct(other: Point) {
+        return this.x * other.x + this.y * other.y + this.z * other.z;
+    }
 }

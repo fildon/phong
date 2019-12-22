@@ -52,12 +52,14 @@ export class Cube implements IDrawable {
     }
 
     public rotate() {
+        this.p0 = this.rotatePoint(this.p0);
         this.p1 = this.rotatePoint(this.p1);
         this.p2 = this.rotatePoint(this.p2);
         this.p3 = this.rotatePoint(this.p3);
         this.p12 = this.rotatePoint(this.p12);
         this.p13 = this.rotatePoint(this.p13);
         this.p23 = this.rotatePoint(this.p23);
+        this.p123 = this.rotatePoint(this.p123);
     }
 
     private rotatePoint(p: Point): Point {

@@ -10,11 +10,24 @@ export class Poly implements IDrawable {
         if (points.length < 3) {
             throw new Error("too few points to define poly");
         }
-        // TODO test that triangle is not degenerate!
+        
+        if (points.length == 4 && !Poly.coplanar(points)) {
+            throw new Error("these points are not coplanar");
+        }
         
         this.points = points;
         this.colour = colour;
         this.update = update
+    }
+
+    static coplanar(points: Point[]): boolean {
+        // points are coplanar iff:
+        // p1p2 . (p1p3 x p1p4) = 0
+        return points[1].subtract(points[0]).dotProduct(
+            points[2].subtract(points[0]).crossProduct(
+                points[3].subtract(points[0])
+            )
+        ) < 0.01 // Allow for rounding errors
     }
 
     getPolys() {

@@ -1,6 +1,4 @@
-import { Poly } from "../drawables/poly";
 import { Point } from "./point";
-import { Colour } from "./colour";
 import { IDrawable } from "../drawables/iDrawable";
 import { Cube } from "../drawables/cube";
 
