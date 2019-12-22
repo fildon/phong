@@ -1,19 +1,4 @@
 export class Colour {
-    public r: number;
-    public g: number;
-    public b: number;
-    public a: number;
-    constructor(r: number, g: number, b: number, a: number) {
-        this.r = r;
-        this.g = g;
-        this.b = b;
-        this.a = a;
-    }
-
-    public equals(other: Colour) {
-        return this.r === other.r && this.g === other.g && this.b === other.b && this.a === other.a;
-    }
-
     public static average(colours: Colour[]) {
         const sumColour = colours.reduce((prev, curr) => {
             return new Colour(
@@ -29,5 +14,21 @@ export class Colour {
             sumColour.b / colours.length,
             sumColour.a / colours.length,
         );
+    }
+
+    public r: number;
+    public g: number;
+    public b: number;
+    public a: number;
+
+    constructor(r: number, g: number, b: number, a: number) {
+        this.r = r;
+        this.g = g;
+        this.b = b;
+        this.a = a;
+    }
+
+    public equals(other: Colour) {
+        return this.r === other.r && this.g === other.g && this.b === other.b && this.a === other.a;
     }
 }

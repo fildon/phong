@@ -1,9 +1,9 @@
 import { Colour } from "./colour";
 
 export class Canvas {
+    public previousImage: Colour[][];
     private canvas: HTMLCanvasElement;
     private ctx: CanvasRenderingContext2D;
-    public previousImage: Colour[][];
     constructor(width: number, height: number) {
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         if (!canvas) {
