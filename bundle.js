@@ -27,10 +27,9 @@ class AnimationLoop {
         this.scene.update();
         const image = this.generateImage();
         this.canvas.paint(image);
-        // 16 ms is just over 60fps
         setTimeout(() => {
             this.tick();
-        }, 16);
+        }, 0);
     }
     generateImage() {
         let image = [];
@@ -53,11 +52,10 @@ class AnimationLoop {
         let shortest = Infinity;
         this.scene.polys.forEach(poly => {
             let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
-            if (windingResult.inPoly) {
-                // TODO this is a hack by which a polygon's distance is defined only by the first vertex
-                if (windingResult.distance < shortest) {
+            if (windingResult) {
+                if (windingResult < shortest) {
                     result = poly.colour;
-                    shortest = windingResult.distance;
+                    shortest = windingResult;
                 }
             }
         });
@@ -85,17 +83,10 @@ class AnimationLoop {
             }
         }
         if (!windingNumber) {
-            return {
-                inPoly: false,
-                distance: NaN // TODO see if we can just use this value as the flag, rather than an if/else
-            };
+            return null;
         }
-        return {
-            inPoly: true,
-            distance: poly.calculateZ(row, column)
-        };
+        return poly.calculateZ(row, column);
     }
-    // TODO have some selfrespect and rename these arguments
     isLeft(P0, P1, P2) {
         return ((P1.x - P0.x) * (P2.y - P0.y)
             - (P2.x - P0.x) * (P1.y - P0.y));
@@ -177,17 +168,18 @@ class Poly {
         // TODO test that triangle is not degenerate!
         this.points = points;
         this.colour = colour;
-        let v1 = [points[0].x - points[1].x, points[0].y - points[1].y, points[0].z - points[1].z];
-        let v2 = [points[0].x - points[2].x, points[0].y - points[2].y, points[0].z - points[2].z];
+    }
+    calculateZ(x, y) {
+        // https://math.stackexchange.com/questions/28043/finding-the-z-value-on-a-plane-with-x-y-values
+        let v1 = [this.points[0].x - this.points[1].x, this.points[0].y - this.points[1].y, this.points[0].z - this.points[1].z];
+        let v2 = [this.points[0].x - this.points[2].x, this.points[0].y - this.points[2].y, this.points[0].z - this.points[2].z];
         let r = v1[1] * v2[2] - v1[2] * v2[1];
         let s = v1[2] * v2[0] - v1[0] * v2[2];
         let t = v1[0] * v2[1] - v1[1] * v2[0];
-        let constant = (1 / t) * (r * points[0].x + s * points[0].y) + points[0].z;
+        let constant = (1 / t) * (r * this.points[0].x + s * this.points[0].y) + this.points[0].z;
         let xMult = -r / t;
         let yMult = -s / t;
-        this.calculateZ = (x, y) => {
-            return constant + xMult * x + yMult * y;
-        };
+        return constant + xMult * x + yMult * y;
     }
 }
 exports.Poly = Poly;
@@ -201,12 +193,10 @@ const colour_1 = require("./colour");
 class Scene {
     constructor() {
         this.polys = [];
-        // TODO just a test scene for now
         this.polys.push(new poly_1.Poly([new point_1.Point(100, 100, 100), new point_1.Point(200, 300, 80), new point_1.Point(300, 100, 200)], new colour_1.Colour(255, 0, 0, 1)));
         this.polys.push(new poly_1.Poly([new point_1.Point(100, 300, 100), new point_1.Point(200, 100, 100), new point_1.Point(300, 300, 100)], new colour_1.Colour(0, 255, 0, 1)));
     }
     update() {
-        // an arbitrary movement
         this.polys[0].points[0].x = (this.polys[0].points[0].x + 1) % 500;
         this.polys[0].points[0].y = (this.polys[0].points[0].y + 1) % 500;
         this.polys[0].points[0].z = (this.polys[0].points[0].z + 1) % 500;

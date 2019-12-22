@@ -19,9 +19,11 @@ export class AnimationLoop {
         this.timestamp = new Date();
         this.timestampElement = document.getElementById('timestamp') as HTMLElement
     }
+
     start() {
         this.tick();
     }
+
     tick() {
         let newTime = new Date();
         let timeDiff = newTime.getTime() - this.timestamp.getTime();
@@ -36,11 +38,11 @@ export class AnimationLoop {
 
         this.canvas.paint(image);
 
-        // 16 ms is just over 60fps
         setTimeout(() => {
             this.tick();
-        }, 16);
+        }, 0);
     }
+
     generateImage(): Colour[][] {
         let image: Colour[][] = [];
         for (let rowIndex = 0; rowIndex < this.height; rowIndex++) {
@@ -64,23 +66,22 @@ export class AnimationLoop {
         let shortest = Infinity;
         this.scene.polys.forEach(poly => {
             let windingResult = this.getWindingResult(rowIndex, columnIndex, poly);
-            if (windingResult.inPoly) {
-                // TODO this is a hack by which a polygon's distance is defined only by the first vertex
-                if (windingResult.distance < shortest) {
+            if (windingResult) {
+                if (windingResult < shortest) {
                     result = poly.colour;
-                    shortest = windingResult.distance;
+                    shortest = windingResult;
                 }
             }
         });
         return result;
     }
 
-    getWindingResult(row: number, column: number, poly: Poly): WindingNumberResult {
+    getWindingResult(row: number, column: number, poly: Poly): number | null {
         let windingNumber = 0;
         let n = poly.points.length;
         for (let i = 0; i < n; i++) {
             let vertexCurrent = poly.points[i];
-            let vertexNext = poly.points[(i+1)%n];
+            let vertexNext = poly.points[(i + 1) % n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
                     if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) > 0) {
@@ -97,25 +98,13 @@ export class AnimationLoop {
             }
         }
         if (!windingNumber) {
-            return {
-                inPoly: false,
-                distance: NaN // TODO see if we can just use this value as the flag, rather than an if/else
-            }
+            return null
         }
-        return {
-            inPoly: true,
-            distance: poly.calculateZ(row, column)
-        }
+        return poly.calculateZ(row, column)
     }
 
-    // TODO have some selfrespect and rename these arguments
     isLeft(P0: Point, P1: Point, P2: Point): number {
         return ((P1.x - P0.x) * (P2.y - P0.y)
-        - (P2.x - P0.x) * (P1.y - P0.y));
+            - (P2.x - P0.x) * (P1.y - P0.y));
     }
-}
-
-interface WindingNumberResult {
-    inPoly: boolean;
-    distance: number;
 }
