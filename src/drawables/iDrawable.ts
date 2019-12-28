@@ -1,6 +1,6 @@
-import { Poly } from "./poly";
+import { Triangle } from "./triangle";
 
 export interface IDrawable {
-    getPolys: () => Poly[];
+    getPolys: () => Triangle[];
     update: () => void;
 }

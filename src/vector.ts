@@ -8,6 +8,10 @@ export class Vector {
         this.z = z;
     }
 
+    public isTheZeroVector() {
+        return this.x === 0 && this.y === 0 && this.z === 0;
+    }
+
     public subtract(other: Vector) {
         return new Vector(this.x - other.x, this.y - other.y, this.z - other.z);
     }

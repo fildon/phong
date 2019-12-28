@@ -1,7 +1,7 @@
 import { Canvas } from "./canvas";
 import { Scene } from "./scene";
 import { Colour } from "./colour";
-import { Poly } from "./drawables/poly";
+import { Triangle } from "./drawables/triangle";
 import { Vector } from "./vector";
 
 export class AnimationLoop {
@@ -80,12 +80,12 @@ export class AnimationLoop {
         return result;
     }
 
-    private getWindingNumber(row: number, column: number, poly: Poly): number | null {
+    private getWindingNumber(row: number, column: number, triangle: Triangle): number | null {
         let windingNumber = 0;
-        const n = poly.vertices.length;
-        for (let i = 0; i < n; i++) {
-            const vertexCurrent = poly.vertices[i];
-            const vertexNext = poly.vertices[(i + 1) % n];
+        const vertices = [triangle.point0, triangle.point1, triangle.point2];
+        for (let i = 0; i < 3; i++) {
+            const vertexCurrent = vertices[i];
+            const vertexNext = vertices[(i + 1) % 3];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
                     if (this.isLeft(vertexCurrent, vertexNext, new Vector(row, column, 0)) > 0) {
@@ -103,7 +103,7 @@ export class AnimationLoop {
         if (!windingNumber) {
             return null;
         }
-        return poly.calculateZ(row, column);
+        return triangle.calculateZ(row, column);
     }
 
     private isLeft(P0: Vector, P1: Vector, P2: Vector): number {
