@@ -1,6 +1,6 @@
 import { Vector } from "./vector";
-import { IDrawable } from "../drawables/iDrawable";
-import { Cube } from "../drawables/cube";
+import { IDrawable } from "./drawables/iDrawable";
+import { Cube } from "./drawables/cube";
 
 export class Scene {
     public drawables: IDrawable[];

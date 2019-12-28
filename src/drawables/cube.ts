@@ -1,9 +1,10 @@
 import { IDrawable } from "./iDrawable";
-import { Vector } from "../src/vector";
+import { Vector } from "../vector";
 import { Poly } from "./poly";
-import { Colour } from "../src/colour";
+import { Colour } from "../colour";
 
 export class Cube implements IDrawable {
+    public update: () => void;
     private v0: Vector;
     private v1: Vector;
     private v2: Vector;
@@ -12,10 +13,9 @@ export class Cube implements IDrawable {
     private v13: Vector;
     private v23: Vector;
     private v123: Vector;
-    public update: () => void;
 
     // We define a cube by a vertex, and its three neighbouring vertices
-    constructor(v0: Vector, v1: Vector, v2: Vector, v3: Vector, update: () => void = () => {}) {
+    constructor(v0: Vector, v1: Vector, v2: Vector, v3: Vector, update: () => void = () => {return; }) {
         // TODO test for degeneracy
         // This will happen if the neighbour vectors are coplanar
 

@@ -1,7 +1,7 @@
 import { Canvas } from "./canvas";
 import { Scene } from "./scene";
 import { Colour } from "./colour";
-import { Poly } from "../drawables/poly";
+import { Poly } from "./drawables/poly";
 import { Vector } from "./vector";
 
 export class AnimationLoop {
