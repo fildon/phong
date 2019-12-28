@@ -2,7 +2,7 @@ import { Canvas } from "./canvas";
 import { Scene } from "./scene";
 import { Colour } from "./colour";
 import { Poly } from "../drawables/poly";
-import { Point } from "./point";
+import { Vector } from "./vector";
 
 export class AnimationLoop {
     private width: number;
@@ -82,19 +82,19 @@ export class AnimationLoop {
 
     private getWindingNumber(row: number, column: number, poly: Poly): number | null {
         let windingNumber = 0;
-        const n = poly.points.length;
+        const n = poly.vertices.length;
         for (let i = 0; i < n; i++) {
-            const vertexCurrent = poly.points[i];
-            const vertexNext = poly.points[(i + 1) % n];
+            const vertexCurrent = poly.vertices[i];
+            const vertexNext = poly.vertices[(i + 1) % n];
             if (vertexCurrent.y <= column) {
                 if (vertexNext.y > column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) > 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Vector(row, column, 0)) > 0) {
                         windingNumber++;
                     }
                 }
             } else {
                 if (vertexNext.y <= column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Point(row, column, 0)) < 0) {
+                    if (this.isLeft(vertexCurrent, vertexNext, new Vector(row, column, 0)) < 0) {
                         windingNumber--;
                     }
                 }
@@ -106,7 +106,7 @@ export class AnimationLoop {
         return poly.calculateZ(row, column);
     }
 
-    private isLeft(P0: Point, P1: Point, P2: Point): number {
+    private isLeft(P0: Vector, P1: Vector, P2: Vector): number {
         return ((P1.x - P0.x) * (P2.y - P0.y)
             - (P2.x - P0.x) * (P1.y - P0.y));
     }

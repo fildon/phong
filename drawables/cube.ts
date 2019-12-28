@@ -1,64 +1,64 @@
 import { IDrawable } from "./iDrawable";
-import { Point } from "../src/point";
+import { Vector } from "../src/vector";
 import { Poly } from "./poly";
 import { Colour } from "../src/colour";
 
 export class Cube implements IDrawable {
-    private p0: Point;
-    private p1: Point;
-    private p2: Point;
-    private p3: Point;
-    private p12: Point;
-    private p13: Point;
-    private p23: Point;
-    private p123: Point;
+    private v0: Vector;
+    private v1: Vector;
+    private v2: Vector;
+    private v3: Vector;
+    private v12: Vector;
+    private v13: Vector;
+    private v23: Vector;
+    private v123: Vector;
     public update: () => void;
 
-    // We define a cube by a point, and its three neighbouring points
-    constructor(p0: Point, p1: Point, p2: Point, p3: Point, update: () => void = () => {}) {
+    // We define a cube by a vertex, and its three neighbouring vertices
+    constructor(v0: Vector, v1: Vector, v2: Vector, v3: Vector, update: () => void = () => {}) {
         // TODO test for degeneracy
         // This will happen if the neighbour vectors are coplanar
 
-        this.p0 = p0;
-        this.p1 = p1;
-        this.p2 = p2;
-        this.p3 = p3;
+        this.v0 = v0;
+        this.v1 = v1;
+        this.v2 = v2;
+        this.v3 = v3;
 
-        // defining vectors
-        const v1 = p1.subtract(p0);
-        const v2 = p2.subtract(p0);
-        const v3 = p3.subtract(p0);
+        // defining edges
+        const e1 = v1.subtract(v0);
+        const e2 = v2.subtract(v0);
+        const e3 = v3.subtract(v0);
 
-        // the set of points that are two edges from the first point
-        this.p12 = p0.add(v1).add(v2);
-        this.p13 = p0.add(v1).add(v3);
-        this.p23 = p0.add(v2).add(v3);
+        // the set of vertices that are two edges from the first vertex
+        this.v12 = v0.add(e1).add(e2);
+        this.v13 = v0.add(e1).add(e3);
+        this.v23 = v0.add(e2).add(e3);
 
-        // the one point that is opposite the first point
-        this.p123 = p0.add(v1).add(v2).add(v3);
+        // the one vertex that is opposite the first vertex
+        this.v123 = v0.add(e1).add(e2).add(e3);
 
         this.update = update;
     }
 
     public getPolys() {
         return [
-            new Poly([this.p0, this.p1, this.p12, this.p2], new Colour(255, 0, 0, 1)),
-            new Poly([this.p0, this.p1, this.p13, this.p3], new Colour(0, 255, 0, 1)),
-            new Poly([this.p0, this.p2, this.p23, this.p3], new Colour(0, 0, 255, 1)),
-            new Poly([this.p3, this.p13, this.p123, this.p23], new Colour(0, 255, 255, 1)),
-            new Poly([this.p2, this.p12, this.p123, this.p23], new Colour(255, 0, 255, 1)),
-            new Poly([this.p1, this.p12, this.p123, this.p13], new Colour(255, 255, 0, 1)),
+            new Poly([this.v0, this.v1, this.v12, this.v2], new Colour(255, 0, 0, 1)),
+            new Poly([this.v0, this.v1, this.v13, this.v3], new Colour(0, 255, 0, 1)),
+            new Poly([this.v0, this.v2, this.v23, this.v3], new Colour(0, 0, 255, 1)),
+            new Poly([this.v3, this.v13, this.v123, this.v23], new Colour(0, 255, 255, 1)),
+            new Poly([this.v2, this.v12, this.v123, this.v23], new Colour(255, 0, 255, 1)),
+            new Poly([this.v1, this.v12, this.v123, this.v13], new Colour(255, 255, 0, 1)),
         ];
     }
 
     public rotate() {
-        this.p0 = this.p0.rotateInYAround(this.p0, 0.01);
-        this.p1 = this.p1.rotateInYAround(this.p0, 0.01);
-        this.p2 = this.p2.rotateInYAround(this.p0, 0.01);
-        this.p3 = this.p3.rotateInYAround(this.p0, 0.01);
-        this.p12 = this.p12.rotateInYAround(this.p0, 0.01);
-        this.p13 = this.p13.rotateInYAround(this.p0, 0.01);
-        this.p23 = this.p23.rotateInYAround(this.p0, 0.01);
-        this.p123 = this.p123.rotateInYAround(this.p0, 0.01);
+        this.v0 = this.v0.rotateInYAround(this.v0, 0.01);
+        this.v1 = this.v1.rotateInYAround(this.v0, 0.01);
+        this.v2 = this.v2.rotateInYAround(this.v0, 0.01);
+        this.v3 = this.v3.rotateInYAround(this.v0, 0.01);
+        this.v12 = this.v12.rotateInYAround(this.v0, 0.01);
+        this.v13 = this.v13.rotateInYAround(this.v0, 0.01);
+        this.v23 = this.v23.rotateInYAround(this.v0, 0.01);
+        this.v123 = this.v123.rotateInYAround(this.v0, 0.01);
     }
 }
