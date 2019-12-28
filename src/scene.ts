@@ -1,6 +1,6 @@
 import { Vector } from "./vector";
 import { IDrawable } from "./drawables/iDrawable";
-import { Cube } from "./drawables/cube";
+import { Parallelepiped } from "./drawables/parallelepiped";
 
 export class Scene {
     public drawables: IDrawable[];
@@ -11,9 +11,9 @@ export class Scene {
         const b = a.rotateInYAround(top, (2 * Math.PI) / 3);
         const c = b.rotateInYAround(top, (2 * Math.PI) / 3);
         this.drawables.push(
-            new Cube(
+            new Parallelepiped(
                 top, a, b, c,
-                function(this: Cube) {
+                function(this: Parallelepiped) {
                     this.rotate();
                 },
             ),
