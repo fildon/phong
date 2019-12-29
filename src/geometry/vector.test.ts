@@ -9,7 +9,7 @@ describe("Rotation", () => {
         );
 
         const expected = new Vector(-20, 0, 10);
-        expect(actual.distanceTo(expected) < 0.01).toBeTruthy();
+        expect(actual.distanceBetween(expected) < 0.01).toBeTruthy();
     });
 
     test("around arbitrary point", () => {
@@ -19,6 +19,6 @@ describe("Rotation", () => {
         const actual = testVector.rotateInYAround(rotationCentre, Math.PI);
 
         const expected = new Vector(50, 20, 110);
-        expect(actual.distanceTo(expected) < 0.01).toBeTruthy();
+        expect(actual.distanceBetween(expected) < 0.01).toBeTruthy();
     });
 });

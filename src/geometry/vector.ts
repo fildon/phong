@@ -28,7 +28,7 @@ export class Vector {
         );
     }
 
-    public dotProduct(other: Vector): number {
+    public dot(other: Vector): number {
         return this.x * other.x + this.y * other.y + this.z * other.z;
     }
 
@@ -43,11 +43,25 @@ export class Vector {
         return rotated.add(translation);
     }
 
-    public distanceTo(other: Vector): number {
-        return Math.sqrt(
+    public distanceBetween(other: Vector): number {
+        return Math.abs(Math.sqrt(
             Math.pow((this.x - other.x), 2) +
             Math.pow((this.y - other.y), 2) +
             Math.pow((this.z - other.z), 2),
+        ));
+    }
+
+    public equals(other: Vector): boolean {
+        return this.x === other.x &&
+            this.y === other.y &&
+            this.z === other.z;
+    }
+
+    public scaleBy(proportion: number): Vector {
+        return new Vector(
+            this.x * proportion,
+            this.y * proportion,
+            this.z * proportion,
         );
     }
 }

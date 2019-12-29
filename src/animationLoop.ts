@@ -2,7 +2,7 @@ import { Canvas } from "./canvas";
 import { Scene } from "./scene";
 import { Colour } from "./colour";
 import { Triangle } from "./drawables/triangle";
-import { Vector } from "./vector";
+import { Vector } from "./geometry/vector";
 
 export class AnimationLoop {
     private width: number;
@@ -59,55 +59,18 @@ export class AnimationLoop {
                 row.push(new Colour(0, 0, 0, 1));
                 continue;
             }
-            const colour = this.colourAtEndOfRay(rowIndex, columnIndex);
+            const colour = this.colourAtPixel(rowIndex, columnIndex);
             row.push(colour);
         }
         return row;
     }
 
-    private colourAtEndOfRay(rowIndex: number, columnIndex: number): Colour {
-        let result = new Colour(0, 0, 0, 1);
-        let shortest = Infinity;
-        this.scene.getTriangles().forEach((poly) => {
-            const windingResult = this.getWindingNumber(rowIndex, columnIndex, poly);
-            if (windingResult) {
-                if (windingResult < shortest) {
-                    result = poly.colour;
-                    shortest = windingResult;
-                }
-            }
-        });
-        return result;
-    }
-
-    private getWindingNumber(row: number, column: number, triangle: Triangle): number | null {
-        let windingNumber = 0;
-        const vertices = [triangle.point0, triangle.point1, triangle.point2];
-        for (let i = 0; i < 3; i++) {
-            const vertexCurrent = vertices[i];
-            const vertexNext = vertices[(i + 1) % 3];
-            if (vertexCurrent.y <= column) {
-                if (vertexNext.y > column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Vector(row, column, 0)) > 0) {
-                        windingNumber++;
-                    }
-                }
-            } else {
-                if (vertexNext.y <= column) {
-                    if (this.isLeft(vertexCurrent, vertexNext, new Vector(row, column, 0)) < 0) {
-                        windingNumber--;
-                    }
-                }
-            }
+    private colourAtPixel(rowIndex: number, columnIndex: number): Colour {
+        const ray = this.scene.camera.getRayAtRelativeXY(rowIndex / this.height, columnIndex / this.width);
+        const rayCastResult = ray.getColourOfNearestIntersection(this.scene.getTriangles());
+        if (!rayCastResult) {
+            return new Colour(0, 0, 0, 1);
         }
-        if (!windingNumber) {
-            return null;
-        }
-        return triangle.calculateZ(row, column);
-    }
-
-    private isLeft(P0: Vector, P1: Vector, P2: Vector): number {
-        return ((P1.x - P0.x) * (P2.y - P0.y)
-            - (P2.x - P0.x) * (P1.y - P0.y));
+        return rayCastResult;
     }
 }

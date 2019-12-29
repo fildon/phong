@@ -1,5 +1,5 @@
 import { IDrawable } from "./iDrawable";
-import { Vector } from "../vector";
+import { Vector } from "../geometry/vector";
 import { Triangle } from "./triangle";
 import { Colour } from "../colour";
 import { Parallelogram } from "./parallelogram";

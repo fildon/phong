@@ -1,6 +1,6 @@
 import { IDrawable } from "./iDrawable";
 import { Triangle } from "./triangle";
-import { Vector } from "../vector";
+import { Vector } from "../geometry/vector";
 import { Colour } from "../colour";
 
 export class Parallelogram implements IDrawable {
