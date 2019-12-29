@@ -3,12 +3,11 @@ import { Colour } from "../colour";
 import { IDrawable } from "./iDrawable";
 
 export class Triangle implements IDrawable {
-    public point0: Vector;
-    public point1: Vector;
-    public point2: Vector;
     public colour: Colour;
     public update: () => void;
-    public normal: Vector;
+    public readonly point0: Vector;
+    public readonly point1: Vector;
+    public readonly point2: Vector;
 
     constructor(point0: Vector, point1: Vector, point2: Vector, colour: Colour, update: () => void = () => {return; }) {
         this.point0 = point0;
@@ -16,8 +15,7 @@ export class Triangle implements IDrawable {
         this.point2 = point2;
         this.colour = colour;
         this.update = update;
-        this.normal = (point1.subtract(point0)).crossProduct((point2.subtract(point0)));
-        if (this.normal.isTheZeroVector()) {
+        if (this.getNormal().isTheZeroVector()) {
             throw new Error("This triangle would be degenerate");
         }
     }
@@ -28,18 +26,27 @@ export class Triangle implements IDrawable {
 
     public calculateZ(x: number, y: number): number {
         // https://math.stackexchange.com/questions/28043/finding-the-z-value-on-a-plane-with-x-y-values
-        const r = this.normal.x;
-        const s = this.normal.y;
-        const t = this.normal.z;
+        const normal = this.getNormal();
+        const r = normal.x;
+        const s = normal.y;
+        const t = normal.z;
         const constant = (1 / t) * (r * this.point0.x + s * this.point0.y) + this.point0.z;
         const xMult = -r / t;
         const yMult = -s / t;
         return constant + xMult * x + yMult * y;
     }
 
-    public rotateAround(point: Vector): void {
-        this.point0 = this.point0.rotateInYAround(point, 0.01);
-        this.point1 = this.point1.rotateInYAround(point, 0.01);
-        this.point2 = this.point2.rotateInYAround(point, 0.01);
+    public defaultAnimation(point: Vector): Triangle {
+        return new Triangle(
+            this.point0.rotateInYAround(point, 0.01),
+            this.point1.rotateInYAround(point, 0.01),
+            this.point2.rotateInYAround(point, 0.01),
+            this.colour,
+            this.update,
+        );
+    }
+
+    private getNormal(): Vector {
+        return (this.point1.subtract(this.point0)).crossProduct((this.point2.subtract(this.point0)));
     }
 }

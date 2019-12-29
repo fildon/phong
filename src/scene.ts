@@ -15,7 +15,7 @@ export class Scene {
             new Parallelepiped(
                 top, a, b, c,
                 function(this: Parallelepiped): void {
-                    this.rotate();
+                    this.defaultAnimation();
                 },
             ),
         );

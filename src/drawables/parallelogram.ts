@@ -4,8 +4,8 @@ import { Vector } from "../vector";
 import { Colour } from "../colour";
 
 export class Parallelogram implements IDrawable {
-    public triangles: Triangle[];
     public update: () => void;
+    private triangles: Triangle[];
     constructor(point0: Vector, point1: Vector, point2: Vector, colour: Colour, update: () => void = () => {return; }) {
         const edge1 = point1.subtract(point0);
         const edge2 = point2.subtract(point0);
@@ -21,7 +21,7 @@ export class Parallelogram implements IDrawable {
         return this.triangles;
     }
 
-    public rotateAround(point: Vector): void {
-        this.triangles.forEach((t) => t.rotateAround(point));
+    public defaultAnimation(point: Vector): void {
+        this.triangles = this.triangles.map((t) => t.defaultAnimation(point));
     }
 }
