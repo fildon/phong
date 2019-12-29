@@ -11,6 +11,7 @@ export class AnimationLoop {
     private scene: Scene;
     private timestamp: Date;
     private timestampElement: HTMLElement;
+    private frameTimes: Date[];
     constructor() {
         this.width = 500;
         this.height = 500;
@@ -18,6 +19,7 @@ export class AnimationLoop {
         this.scene = new Scene();
         this.timestamp = new Date();
         this.timestampElement = document.getElementById("timestamp") as HTMLElement;
+        this.frameTimes = [];
     }
 
     public start(): void {
@@ -26,11 +28,13 @@ export class AnimationLoop {
 
     private tick(): void {
         const newTime = new Date();
-        const timeDiff = newTime.getTime() - this.timestamp.getTime();
-        let fps = 1000 / timeDiff;
-        fps = Math.floor(100 * fps) / 100; // 2 decimal places
-        this.timestampElement.textContent = fps.toString();
-        this.timestamp = newTime;
+        this.frameTimes = this.frameTimes.filter((time) => {
+            return newTime.getTime() - time.getTime() < 1000;
+        });
+        if (this.frameTimes) {
+            this.timestampElement.textContent = this.frameTimes.length.toString();
+        }
+        this.frameTimes.push(newTime);
 
         this.scene.update();
 
