@@ -20,11 +20,11 @@ export class AnimationLoop {
         this.timestampElement = document.getElementById("timestamp") as HTMLElement;
     }
 
-    public start() {
+    public start(): void {
         this.tick();
     }
 
-    private tick() {
+    private tick(): void {
         const newTime = new Date();
         const timeDiff = newTime.getTime() - this.timestamp.getTime();
         let fps = 1000 / timeDiff;
@@ -68,7 +68,7 @@ export class AnimationLoop {
     private colourAtEndOfRay(rowIndex: number, columnIndex: number): Colour {
         let result = new Colour(0, 0, 0, 1);
         let shortest = Infinity;
-        this.scene.getPolys().forEach((poly) => {
+        this.scene.getTriangles().forEach((poly) => {
             const windingResult = this.getWindingNumber(rowIndex, columnIndex, poly);
             if (windingResult) {
                 if (windingResult < shortest) {

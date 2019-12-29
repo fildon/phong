@@ -5,7 +5,12 @@
     ],
     "jsRules": {},
     "rules": {
-        "ordered-imports": false
+        "ordered-imports": false,
+        "typedef": [
+            true,
+            "call-signature",
+            "parameter"
+        ]
     },
     "rulesDirectory": []
 }

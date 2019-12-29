@@ -1,5 +1,5 @@
 export class Colour {
-    public static average(colours: Colour[]) {
+    public static average(colours: Colour[]): Colour {
         const sumColour = colours.reduce((prev, curr) => {
             return new Colour(
                 prev.r + curr.r,
@@ -28,7 +28,7 @@ export class Colour {
         this.a = a;
     }
 
-    public equals(other: Colour) {
+    public equals(other: Colour): boolean {
         return this.r === other.r && this.g === other.g && this.b === other.b && this.a === other.a;
     }
 }

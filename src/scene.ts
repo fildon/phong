@@ -1,6 +1,7 @@
 import { Vector } from "./vector";
 import { IDrawable } from "./drawables/iDrawable";
 import { Parallelepiped } from "./drawables/parallelepiped";
+import { Triangle } from "./drawables/triangle";
 
 export class Scene {
     public drawables: IDrawable[];
@@ -13,20 +14,20 @@ export class Scene {
         this.drawables.push(
             new Parallelepiped(
                 top, a, b, c,
-                function(this: Parallelepiped) {
+                function(this: Parallelepiped): void {
                     this.rotate();
                 },
             ),
         );
     }
 
-    public getPolys() {
+    public getTriangles(): Triangle[] {
         return this.drawables
-            .map((d) => d.getPolys())
+            .map((d) => d.getTriangles())
             .reduce((prev, curr) => prev.concat(curr), []);
     }
 
-    public update() {
+    public update(): void {
         this.drawables.forEach((d) => d.update());
     }
 }

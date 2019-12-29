@@ -2,6 +2,7 @@ import { IDrawable } from "./iDrawable";
 import { Vector } from "../vector";
 import { Triangle } from "./triangle";
 import { Colour } from "../colour";
+import { Parallelogram } from "./parallelogram";
 
 export class Parallelepiped implements IDrawable {
     public update: () => void;
@@ -40,7 +41,7 @@ export class Parallelepiped implements IDrawable {
         this.update = update;
     }
 
-    public getPolys() {
+    public getTriangles(): Triangle[] {
         return [
             new Triangle(this.point0, this.point12, this.point2, new Colour(255, 0, 0, 1)),
             new Triangle(this.point0, this.point1, this.point12, new Colour(255, 0, 0, 1)),
@@ -62,7 +63,7 @@ export class Parallelepiped implements IDrawable {
         ];
     }
 
-    public rotate() {
+    public rotate(): void {
         this.point0 = this.point0.rotateInYAround(this.point0, 0.01);
         this.point1 = this.point1.rotateInYAround(this.point0, 0.01);
         this.point2 = this.point2.rotateInYAround(this.point0, 0.01);

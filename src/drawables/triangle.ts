@@ -22,28 +22,24 @@ export class Triangle implements IDrawable {
         }
     }
 
-    public getPolys() {
+    public getTriangles(): Triangle[] {
         return [this];
     }
 
     public calculateZ(x: number, y: number): number {
         // https://math.stackexchange.com/questions/28043/finding-the-z-value-on-a-plane-with-x-y-values
-        const v1 = [
-            this.point0.x - this.point1.x,
-            this.point0.y - this.point1.y,
-            this.point0.z - this.point1.z,
-        ];
-        const v2 = [
-            this.point0.x - this.point2.x,
-            this.point0.y - this.point2.y,
-            this.point0.z - this.point2.z,
-        ];
-        const r = v1[1] * v2[2] - v1[2] * v2[1];
-        const s = v1[2] * v2[0] - v1[0] * v2[2];
-        const t = v1[0] * v2[1] - v1[1] * v2[0];
+        const r = this.normal.x;
+        const s = this.normal.y;
+        const t = this.normal.z;
         const constant = (1 / t) * (r * this.point0.x + s * this.point0.y) + this.point0.z;
         const xMult = -r / t;
         const yMult = -s / t;
         return constant + xMult * x + yMult * y;
+    }
+
+    public rotateAround(point: Vector): void {
+        this.point0 = this.point0.rotateInYAround(point, 0.01);
+        this.point1 = this.point1.rotateInYAround(point, 0.01);
+        this.point2 = this.point2.rotateInYAround(point, 0.01);
     }
 }
