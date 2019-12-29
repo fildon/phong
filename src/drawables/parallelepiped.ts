@@ -7,24 +7,11 @@ import { Parallelogram } from "./parallelogram";
 export class Parallelepiped implements IDrawable {
     public update: () => void;
     private parallelograms: Parallelogram[];
-    private point0: Vector;
-    private point1: Vector;
-    private point2: Vector;
-    private point3: Vector;
-    private point12: Vector;
-    private point13: Vector;
-    private point23: Vector;
-    private point123: Vector;
 
     // We define a parallelepiped by a vertex, and its three neighbouring vertices
     constructor(point0: Vector, point1: Vector, point2: Vector, point3: Vector, update: () => void = () => {return; }) {
         // TODO test for degeneracy
         // This will happen if all four points are coplanar
-
-        this.point0 = point0;
-        this.point1 = point1;
-        this.point2 = point2;
-        this.point3 = point3;
 
         // defining edges
         const edge1 = point1.subtract(point0);
@@ -32,20 +19,17 @@ export class Parallelepiped implements IDrawable {
         const edge3 = point3.subtract(point0);
 
         // the set of vertices that are two edges from the first vertex
-        this.point12 = point0.add(edge1).add(edge2);
-        this.point13 = point0.add(edge1).add(edge3);
-        this.point23 = point0.add(edge2).add(edge3);
-
-        // the one vertex that is opposite the first vertex
-        this.point123 = point0.add(edge1).add(edge2).add(edge3);
+        const point12 = point0.add(edge1).add(edge2);
+        const point13 = point0.add(edge1).add(edge3);
+        const point23 = point0.add(edge2).add(edge3);
 
         this.parallelograms = [
-            new Parallelogram(this.point0, this.point1, this.point2, new Colour(255, 0, 0, 1)),
-            new Parallelogram(this.point0, this.point3, this.point1, new Colour(0, 255, 0, 1)),
-            new Parallelogram(this.point0, this.point2, this.point3, new Colour(0, 0, 255, 1)),
-            new Parallelogram(this.point3, this.point23, this.point13, new Colour(0, 255, 255, 1)),
-            new Parallelogram(this.point2, this.point12, this.point23, new Colour(255, 0, 255, 1)),
-            new Parallelogram(this.point1, this.point13, this.point12, new Colour(255, 255, 0, 1)),
+            new Parallelogram(point0, point1, point2, new Colour(255, 0, 0, 1)),
+            new Parallelogram(point0, point3, point1, new Colour(0, 255, 0, 1)),
+            new Parallelogram(point0, point2, point3, new Colour(0, 0, 255, 1)),
+            new Parallelogram(point3, point23, point13, new Colour(0, 255, 255, 1)),
+            new Parallelogram(point2, point12, point23, new Colour(255, 0, 255, 1)),
+            new Parallelogram(point1, point13, point12, new Colour(255, 255, 0, 1)),
         ];
 
         this.update = update;
