@@ -19,7 +19,7 @@
   },
   "dependencies": {
     "tslint": "^5.20.1",
-    "typescript": "^3.7.4",
+    "typescript": "^4.0.2",
     "webpack": "^4.41.4"
   }
 }
