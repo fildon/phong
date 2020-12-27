@@ -66,6 +66,10 @@ export class AnimationLoop {
   private generateImageRow(rowIndex: number): Colour[] {
     const row: Colour[] = [];
     for (let columnIndex = 0; columnIndex < this.width; columnIndex++) {
+      if (rowIndex % 2 !== 0 || columnIndex % 2 !== 0) {
+        row.push(new Colour(0, 0, 0, 1));
+        continue;
+      }
       const colour = this.colourAtPixel(rowIndex, columnIndex);
       row.push(colour);
     }
