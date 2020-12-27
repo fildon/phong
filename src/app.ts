@@ -1,5 +1,9 @@
 import { AnimationLoop } from "./animationLoop";
 
-document.addEventListener("DOMContentLoaded", () => {
+document.addEventListener(
+  "DOMContentLoaded",
+  () => {
     new AnimationLoop().start();
-}, false);
+  },
+  false
+);

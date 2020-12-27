@@ -1,16 +1,29 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <script>var exports = {};</script>
-        <script src="bundle.js"></script>
-    </head>
-    <body>
-        <a href="../index.html">Home</a>
-        <canvas id='canvas' style='border: 1px solid black; display: block'></canvas>
-        <div>frames per second</div>
-        <div id='timestamp'></div>
-        <div>target frames per second</div>
-        <div>60</div>
-        <p>You are looking at a handmade raytracer. A cube is defined in 3D. Each frame, a ray is projected from each and every pixel in the view port into the 3D world. If it intersects a face, then the pixel that cast the ray is coloured the colour of that face. In the case of multiple intersections, the nearest face is used.</p>
-    </body>
+  <head>
+    <script>
+      var exports = {};
+    </script>
+    <script src="bundle.js"></script>
+  </head>
+  <body>
+    <a href="../index.html">Home</a>
+    <canvas
+      id="canvas"
+      style="border: 1px solid black; display: block"
+    ></canvas>
+    <div>frames per second</div>
+    <div id="timestamp"></div>
+    <div>percent loaded:</div>
+    <div id="memo"></div>
+    <div>target frames per second</div>
+    <div>60</div>
+    <p>
+      You are looking at a handmade raytracer. A cube is defined in 3D. Each
+      frame, a ray is projected from each and every pixel in the view port into
+      the 3D world. If it intersects a face, then the pixel that cast the ray is
+      coloured the colour of that face. In the case of multiple intersections,
+      the nearest face is used.
+    </p>
+  </body>
 </html>
